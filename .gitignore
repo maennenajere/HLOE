@@ -25,4 +25,3 @@ dist-ssr
 .env
 /.idea/
 /.vscode/
-/package-lock.json
