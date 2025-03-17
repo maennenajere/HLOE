@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 import './index.css';
 
 function App() {
@@ -77,6 +79,8 @@ function App() {
                 </div>
             )}
             <p>Every second counts, make the most of it!</p>
+            <SpeedInsights />
+            <Analytics />
         </div>
     );
 }
