@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 :root {
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-family: 'Roboto', sans-serif;
+  --heading-font-family: 'Open Sans', sans-serif;
   --background-color: #121212;
   --text-color: #e0e0e0;
   --primary-color: #bb86fc;
@@ -32,6 +36,7 @@ body {
 }
 
 h1 {
+  font-family: var(--heading-font-family);
   font-size: var(--font-size-large);
   margin-bottom: var(--padding);
 }
@@ -80,5 +85,14 @@ p {
 }
 
 h2, h3 {
+  font-family: var(--heading-font-family);
   margin: 10px 0;
+}
+
+.result-box {
+  display: block;
+  margin: var(--box-margin);
+  background-color: var(--box-background);
+  padding: var(--box-padding);
+  border-radius: var(--box-border-radius);
 }

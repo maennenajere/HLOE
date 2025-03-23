@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { SpeedInsights } from "@vercel/speed-insights/react"
-import { Analytics } from "@vercel/analytics/react";
 import './index.css';
 
 function App() {
@@ -9,21 +7,29 @@ function App() {
 
     const calculateAge = () => {
         if (!birthday) {
-            alert("No way you are born without a birthday!");
+            alert("No way you can be born without a birthday!?");
             return;
         }
 
         const birthDate = new Date(birthday);
         const now = new Date();
 
+        const ageInMilliseconds = now - birthDate;
+
+        const seconds = Math.floor(ageInMilliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const weeks = Math.floor(days / 7);
+
         let years = now.getFullYear() - birthDate.getFullYear();
         let months = now.getMonth() - birthDate.getMonth();
-        let days = now.getDate() - birthDate.getDate();
+        let remainingDays = now.getDate() - birthDate.getDate();
 
-        if (days < 0) {
+        if (remainingDays < 0) {
             months--;
             const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-            days += lastMonth.getDate();
+            remainingDays += lastMonth.getDate();
         }
 
         if (months < 0) {
@@ -31,56 +37,67 @@ function App() {
             months += 12;
         }
 
-        const diffMs = now - birthDate;
-        const totalSeconds = Math.floor(diffMs / 1000);
-        const totalMinutes = Math.floor(totalSeconds / 60);
-        const totalHours = Math.floor(totalMinutes / 60);
-        const totalDays = Math.floor(totalHours / 24);
-        const totalWeeks = Math.floor(totalDays / 7);
-        const remainingDays = totalDays % 7;
-
         setResult({
             years,
             months,
-            days,
-            totalWeeks,
-            remainingDays,
-            totalDays,
-            totalHours,
-            totalMinutes,
-            totalSeconds
+            days: remainingDays,
+            totalWeeks: weeks,
+            remainingDays: days % 7,
+            totalDays: days,
+            totalHours: hours,
+            totalMinutes: minutes,
+            totalSeconds: seconds
         });
     };
 
     return (
         <div className="container">
-            <h1>How Long Have I Been on This Beautiful Earth? 🌍</h1>
+            <h1>How Long Have I Been on This Earth? 🌍</h1>
 
-            <input
-                type="date"
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
-            />
-            <button onClick={calculateAge}>Calculate</button>
+            <div className="input-section">
+                <input
+                    type="date"
+                    value={birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
+                />
+                <button onClick={calculateAge}>Calculate</button>
+            </div>
 
             {result && (
-                <div className="result">
-                    <h2>Age:</h2>
-                    <p className="age">
-                        {result.years} years {result.months} months {result.days} days
-                    </p>
+                <div className="results-container">
+                    <div className="result-box primary">
+                        <h2>Your Age</h2>
+                        <p>{result.years} years {result.months} months {result.days} days</p>
+                    </div>
 
-                    <h3>or</h3>
-                    <p>{result.totalWeeks} weeks {result.remainingDays} days</p>
-                    <p>{result.totalDays.toLocaleString()} days</p>
-                    <p>{result.totalHours.toLocaleString()} hours</p>
-                    <p>{result.totalMinutes.toLocaleString()} minutes</p>
-                    <p>{result.totalSeconds.toLocaleString()} seconds</p>
+                    <div className="result-box">
+                        <h3>In Weeks</h3>
+                        <p>{result.totalWeeks} weeks and {result.remainingDays} days</p>
+                    </div>
+
+                    <div className="result-box">
+                        <h3>In Days</h3>
+                        <p>{result.totalDays.toLocaleString()} days</p>
+                    </div>
+
+                    <div className="result-box">
+                        <h3>In Hours</h3>
+                        <p>{result.totalHours.toLocaleString()} hours</p>
+                    </div>
+
+                    <div className="result-box">
+                        <h3>In Minutes</h3>
+                        <p>{result.totalMinutes.toLocaleString()} minutes</p>
+                    </div>
+
+                    <div className="result-box">
+                        <h3>In Seconds</h3>
+                        <p>{result.totalSeconds.toLocaleString()} seconds</p>
+                    </div>
                 </div>
             )}
-            <p>Every second counts, make the most of it!</p>
-            <SpeedInsights />
-            <Analytics />
+
+            <p className="moti">Every second counts, make the most of it!</p>
         </div>
     );
 }
