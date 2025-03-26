@@ -1,0 +1,31 @@
+.header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: var(--padding);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    text-align: center;
+}
+
+.header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: var(--padding) 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.header nav ul li {
+    display: inline;
+}
+
+.header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: var(--font-size-medium);
+    transition: color 0.3s;
+}
+
+.header nav ul li a:hover {
+    color: var(--primary-color-hover);
+}

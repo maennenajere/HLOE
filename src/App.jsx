@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { differenceInYears, differenceInMonths, differenceInDays, addYears, addMonths } from "date-fns";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 import './index.css';
 
 function App() {
     const [birthday, setBirthday] = useState("");
     const [result, setResult] = useState(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        document.body.classList.toggle('dark-mode', isDarkMode);
+    }, [isDarkMode]);
+
+    const toggleDarkMode = () => {
+        setIsDarkMode(prevMode => !prevMode);
+    };
 
     const calculateAge = () => {
         if (!birthday) {
@@ -14,44 +26,43 @@ function App() {
         const birthDate = new Date(birthday);
         const now = new Date();
 
-        const ageInMilliseconds = now - birthDate;
+        const years = differenceInYears(now, birthDate);
+        const adjustedBirthDate = addYears(birthDate, years);
 
-        const seconds = Math.floor(ageInMilliseconds / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-        const weeks = Math.floor(days / 7);
+        let months = differenceInMonths(now, adjustedBirthDate);
+        const adjustedBirthDateWithMonths = addMonths(adjustedBirthDate, months);
 
-        let years = now.getFullYear() - birthDate.getFullYear();
-        let months = now.getMonth() - birthDate.getMonth();
-        let remainingDays = now.getDate() - birthDate.getDate();
+        let days = differenceInDays(now, adjustedBirthDateWithMonths);
 
-        if (remainingDays < 0) {
-            months--;
-            const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-            remainingDays += lastMonth.getDate();
+        if (days < 0) {
+            months -= 1;
+            days = differenceInDays(now, addMonths(adjustedBirthDate, months));
         }
 
-        if (months < 0) {
-            years--;
-            months += 12;
-        }
+        const totalDays = differenceInDays(now, birthDate);
+        const totalWeeks = Math.floor(totalDays / 7);
+        const remainingDays = totalDays % 7;
+
+        const totalHours = totalDays * 24;
+        const totalMinutes = totalHours * 60;
+        const totalSeconds = totalMinutes * 60;
 
         setResult({
             years,
             months,
-            days: remainingDays,
-            totalWeeks: weeks,
-            remainingDays: days % 7,
-            totalDays: days,
-            totalHours: hours,
-            totalMinutes: minutes,
-            totalSeconds: seconds
+            days,
+            totalWeeks,
+            remainingDays,
+            totalDays,
+            totalHours,
+            totalMinutes,
+            totalSeconds
         });
     };
 
     return (
         <div className="container">
+            <Header toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
             <h1>How Long Have I Been on This Earth? 🌍</h1>
 
             <div className="input-section">
@@ -98,6 +109,7 @@ function App() {
             )}
 
             <p className="moti">Every second counts, make the most of it!</p>
+            <Footer />
         </div>
     );
 }
